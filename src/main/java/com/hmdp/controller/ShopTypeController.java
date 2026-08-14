@@ -25,10 +25,12 @@ public class ShopTypeController {
     @Resource
     private IShopTypeService typeService;
 
+    /*  SELECT id, name, icon, sort, create_time, update_time
+        FROM tb_shop_type
+        ORDER BY sort ASC  */
     @GetMapping("list")
     public Result queryTypeList() {
-        List<ShopType> typeList = typeService
-                .query().orderByAsc("sort").list();
-        return Result.ok(typeList);
+        
+        return typeService.queryTypeList();
     }
 }
