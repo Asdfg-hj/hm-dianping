@@ -15,7 +15,6 @@ import com.hmdp.entity.Shop;
 
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -97,8 +96,7 @@ public class CacheClient {
         }
         // 3.如果命中，把jason反序列化为对象
         RedisData redisData = JSONUtil.toBean(json, RedisData.class);
-        JSONObject data = (JSONObject) redisData.getData();
-        R r = JSONUtil.toBean(data, type);
+        R r = JSONUtil.toBean(JSONUtil.parseObj(redisData.getData()), type);
         LocalDateTime expireTime = redisData.getExpireTime();
         // 4.判断缓存是否过期
         if(expireTime.isAfter(LocalDateTime.now())){
@@ -119,7 +117,7 @@ public class CacheClient {
                     //查询数据库
                     R r1 = dbFallback.apply(id);
                     //写入缓存
-                    this.setWithLogicalExpire(key, lockKey, time, TimeUnit.MINUTES);
+                    this.setWithLogicalExpire(key, r1, time, unit);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }finally{
