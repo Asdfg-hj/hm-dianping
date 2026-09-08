@@ -62,6 +62,12 @@
             <artifactId>aspectjweaver</artifactId>
             <version>1.5.4</version>
         </dependency>
+        <!--redisson-->
+        <dependency>
+            <artifactId>redisson</artifactId>
+            <groupId>org.redisson</groupId>
+            <version>3.13.6</version>
+        </dependency>
 
     </dependencies>
 
